@@ -1,0 +1,113 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+	<title>Express - node Webフレームワーク | 日本語ドキュメンテーション</title>
+	<link rel="stylesheet" href="./css/style.css" />
+	<script type="text/javascript" src="./js/jquery/jquery-1.6.1.min.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+	    $('.section').hide();
+	    $('.toggle, a.section-title').toggle(function(){
+	      $(this).siblings('ul').fadeIn(300);
+	      return false;
+	    }, function(){
+	      $(this).siblings('ul').fadeOut(300);
+	      return false;
+	    });
+	  });
+	</script>
+</head>
+<body>
+	<a href="http://github.com/visionmedia/express"> 
+	  <img alt="Fork me on GitHub" id="ribbon" src="images/forkme_right_white_ffffff.png" /> 
+	</a>
+	<div id="wrapper">
+		<div id="container">
+			<a href="http://github.com/visionmedia/express" id="logo">Express</a> 
+			<p id="tagline">ハイパフォーマンス、ハイクラスなWeb開発を<a href="http://nodejs.org/">Node.js</a>に。</p>
+			<ul id="menu">
+				<li><a href="">ホーム</a></li>
+				<li><a href="./guide/">ガイド</a></li>
+				<li><a href="./screencasts/">スクリーンキャスト</a></li>
+				<li><a href="./applications/">アプリケーション</a></li>
+				<li><a href="./translation/">翻訳について</a></li>
+			</ul>
+<pre><code>var app = express.createServer();
+
+app.get('/', function(req, res){
+  res.send('Hello World');
+});
+
+app.listen(3000);
+</code></pre>
+
+            <h2>主な特徴</h2>
+            
+            <ul>
+                <li>堅牢なルーティング</li>
+                <li>リダイレクト・ヘルパー</li>
+                <li>動的なビューヘルパー</li>
+                <li>アプリケーションレベルで設定可能なビュー・オプション</li>
+                <li>コンテントネゴシエーション</li>
+                <li>アプリケーションのマウント</li>
+                <li>高いパフォーマンスへのフォーカス</li>
+                <li>ビューの描画とパーシャルのサポート</li>
+                <li>環境にもとづく構成</li>
+                <li>セッションにもとづくフラッシュ通知</li>
+                <li><a href="http://github.com/senchalabs/connect">Connect</a>上に構築</li>
+                <li><a href="http://expressjs.com/executable.html">Executable</a>による素早いアプリケーション生成</li>
+                <li>広範なテスト範囲</li>
+            </ul>
+            
+            
+            <h2>コントリビューター</h2>
+            
+            <p>以下はExpressの主なコントリビュータです(順不同)。</p>
+            
+            <ul>
+                <li>TJ Holowaychuk (<a href="http://github.com/visionmedia">visionmedia</a>)</li>
+                <li>Ciaran Jessup (<a href="http://github.com/ciaranj">ciaranj</a>)</li>
+                <li>Aaron Heckmann (<a href="http://github.com/aheckmann">aheckmann</a>)</li>
+                <li>Guillermo Rauch (<a href="http://github.com/guille">guille</a>)</li>
+            </ul>
+            
+            
+            <h2>サードパーティモジュール</h2>
+            
+            <p>以下のモジュール群はExpress公認のものです。</p>
+            
+            <ul>
+                <li><a href="http://github.com/visionmedia/express-resource">express-resource</a> - 優秀なルーティング機構を提供</li>
+                <li><a href="http://github.com/visionmedia/express-messages">express-messages</a> - flash message notification rendering</li>
+                <li><a href="http://github.com/visionmedia/express-configuration">express-configure</a> - 非同期な環境設定をサポート (load settings from redis etc)</li>
+                <li><a href="http://github.com/visionmedia/express-namespace">express-namespace</a> - 名前空間によるルーティングをサポート</li>
+            </ul>
+            
+            
+            <h2>その他の情報</h2>
+            
+            <ul>
+                <li><a href="http://groups.google.com/group/express-js">Google Group</a>: ディスカッション</li>
+                <li><a href="http://twitter.com/tjholowaychuk">tjholowaychuk</a> をフォロー: アップデート情報</li>
+                <li><a href="http://senchalabs.github.com/connect">Connect</a>: Connectのドキュメント</li>
+                <li><a href="http://wiki.github.com/senchalabs/connect/">Connect Wiki</a>: contribミドルウェアについて</li>
+                <li><a href="http://github.com/visionmedia/express/tree/master/examples/">examples</a></li>
+                <li><a href="http://github.com/visionmedia/express">source</a></li>
+                <li><a href="http://expressjs.com/contrib.html">contrib guide</a></li>
+            </ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11355664-8']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+</body>
+</html>

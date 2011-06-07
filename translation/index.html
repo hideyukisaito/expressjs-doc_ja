@@ -1,0 +1,72 @@
+<html lang="ja-JP">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Express - node Webフレームワーク | 日本語ドキュメンテーション</title>
+	<link rel="stylesheet" href="../css/style.css" />
+    <script type="text/javascript" src="../js/jquery/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery.smooth-scroll.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $('.section').hide();
+            $('.toggle, a.section-title').toggle(function() {
+                $(this).siblings('ul').fadeIn(300);
+                return false;
+            }, function() {
+                $(this).siblings('ul').fadeOut(300);
+                return false;
+            });
+            $('#toc a').not('.toggle').click(function(e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                if (href.indexOf('#') == 0 && href != '#') {
+                    console.log($(href));
+                    $.smoothScroll({
+                        offset: -20,
+                    	scrollTarget: href,
+                    	speed: 800
+                	});
+				}
+            });
+        });
+    </script>
+</head>
+<body>
+    <a href="http://github.com/visionmedia/express"> 
+	   <img alt="Fork me on GitHub" id="ribbon" src="http://s3.amazonaws.com/github/ribbons/forkme_right_white_ffffff.png"> 
+	</a>
+	
+	<div id="wrapper">
+        <div id="container">
+			<a href="http://github.com/visionmedia/express" id="logo">Express</a> 
+			<p id="tagline">
+			   ハイパフォーマンス、ハイクラスなWeb開発を<a href="http://nodejs.org/">Node.js</a>に。
+			</p>
+			<ul id="menu">
+				<li><a href="../">ホーム</a></li>
+				<li><a href="">ガイド</a></li>
+				<li><a href="../screencasts">スクリーンキャスト</a></li>
+				<li><a href="../applications">アプリケーション</a></li>
+				<li><a href="../translation.html">翻訳について</a></li>
+			</ul>
+            
+            <h2 id="configuration">翻訳について</h2>
+            
+            <p>このドキュメントは <em><a href="http://twitter.com/#!/hideyukisaito">@hideyukisaito</a></em> が翻訳しています。Express自体もまだ経験が浅く、また英語もたいして出来ないため、多分に拙い訳となっていることを先にお詫びしておきます。ごめんなさいごめんなさい。。</p>
+            <p>おかしな部分があればTwitterもしくはメール(info at hideyukisaito.com)まで遠慮無くご連絡ください。フィードバックは大変ありがたいです。</p>
+            
+            <p>オリジナルは <a href="http://github.com/visionmedia">TJ Holowaychuk</a> によるものであり、また彼の好意により、画像やデザイン、コードなどの各リソースをそのまま使用させていただいているほか、本家からリンクもして頂いてます。この場を借りて感謝します。Thank you, TJ!! :)</p>
+            
+            <p>このドキュメントの他、以下の翻訳物も公開しています。</p>
+            <ul>
+                <li><a href="http://hideyukisaito.com/doc/jade/"><em>Jade - テンプレートエンジン</em></a></li>
+                <li><a href="http://hideyukisaito.com/doc/npm/dev/"><em>npm デベロッパーズガイド</em></a></li>
+            </ul>
+            
+            <p>もしこれらが役に立つようなことがありましたら、ぜひ<em><a href="http://www.amazon.co.jp/registry/wishlist/2MOH5OF7IXF0E/ref=cm_wl_rlist_go" target="_blank">応援のおたより</a></em>をよろしくお願いいたします。</p>
+			</div>
+		</div>
+	
+</body>
+</html>
