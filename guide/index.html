@@ -132,7 +132,7 @@
             
             <h2 id="quick-start">クイックスタート</h2>
             
-            <p>expressを始めるもっとも簡単な方法は、実行可能な <code>express(1)</code> を利用してアプリケーションの生成することです。</p>
+            <p>expressを始めるもっとも簡単な方法は、<code>express</code> コマンドを利用してアプリケーションを生成することです。</p>
             
             <p>アプリケーションの作成:</p> 
  
@@ -170,9 +170,9 @@ app.listen(3000);</code></pre>
             
             <h2 id="configuration">環境設定</h2>
             
-            <p>Expressは <em>production</em> と <em>development</em> の任意のモードをサポートしています。開発者は <em>configure()</em> メソッドを使用することで、現在のモードに必要な設定をおこなうことが可能です。<em>configure()</em> がモード名なしで呼ばれた際、引数に指定したコールバックがモード固有のコールバックの前に実行されます。</p>
+            <p>Expressは <em>production</em> や <em>development</em> といった任意の実行環境をサポートしています。開発者は <em>configure()</em> メソッドを使用することで、現在のモードに必要な設定を行うことが出来ます。<em>configure()</em> が環境名なしで呼ばれた場合、引数に指定したコールバック関数が環境固有のコールバック関数の前に実行されます。</p>
             
-            <p>以下の例では <em>development</em> モードにのみ、例外発生時のスタックトレースをオンにするため <em>dumpExceptions</em> オプションを <em>true</em> に設定していますが、両モード共通の設定として <em>methodOverride</em> と <em>bodyParser</em> を利用しています。アプリケーションのルーティングの割り当てに利用できる <em>app.router</em> をここで使用しない場合、最初の <em>app.get()</em> や <em>app.post()</em> その他の呼び出しがパスの割り当ておこないます。</p>
+            <p>以下の例では <em>development</em> モードにのみ、例外発生時のスタックトレースをオンにするため <em>dumpExceptions</em> オプションを <em>true</em> に設定していますが、両モード共通の設定として <em>methodOverride</em> と <em>bodyParser</em> を記述しています。ルーティングに利用できる <em>app.router</em> をここで記述しない場合、最初の <em>app.get()</em> や <em>app.post()</em> その他の呼び出しがパスの割り当ておこないます。</p>
             
 <pre><code>app.configure(function(){
     app.use(express.methodOverride());
@@ -191,7 +191,13 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });</code></pre>
             
-            <p>任意の設定のために、Expressは <em>set(key[, val])</em>, <em>enable(key)</em>, <em>disable(key)</em> などのメソッドを提供しています。</p>
+            <p>類似する環境向けに、複数の環境名の文字列を渡すこともできます。</p>
+            
+<pre><code>app.configure('stage', 'prod', function(){
+  // config
+});</code></pre>
+            
+            <p>環境内部の任意の設定のために、<em>set(key[, val])</em>, <em>enable(key)</em>, <em>disable(key)</em> などのメソッドを提供しています。</p>
             
 <pre><code>app.configure(function(){
   app.set('views', __dirname + '/views');
@@ -208,44 +214,46 @@ app.configure('production', function(){
   // =&gt; false
 });</code></pre>
             
-            <p>モードを変更するには、環境変数 <em>NODE_ENV</em> の値をセットし直します。</p>
+            <p><em>NODE_ENV</em> の値をセットすることで、実行環境を変更できます。</p>
             
             <pre><code>$ NODE_ENV=production node app.js</code></pre>
             
-            <p>そしてこれは <em>非常に</em> 重要なことですが, 多くのキャッシュ機構はproductionモード <em>のみ</em> で有効です。</p>
+            <p>そして、これは <em>非常に</em> 重要なことですが, 多くのキャッシュ機構は production 環境<em>のみ</em>で有効です。</p>
 
             <h2 id="settings">セッティング</h2>
             
             <p>Expressは以下のセッティングをサポートしています。</p>
             
             <ul>
-            <li><em>home</em>: <em>res.redirect()</em> によって使用されるアプリケーションの基底パスで、マウントされたアプリケーションを透明にハンドリングします。</li>
+            <li><em>home</em>: <em>res.redirect()</em> により参照されるアプリケーションのベースパスで、マウントされたアプリケーションを透過的にハンドリングします。</li>
             <li><em>views</em>: <strong>CWD/views</strong> を規定する、Viewファイルのルートパスです。</li>
             <li><em>view engine</em>: ビューの表示に使用されるデフォルトのビューエンジンの名前です。</li>
             <li><em>view options</em>: ビュー全体のオプションを指定するオブジェクトです。</li>
             <li><em>view cache</em>: ビューのキャッシュを有効にします( <em>production</em> モードでのみ有効)</li>
             <li><em>case sensitive routes</em>: ケースセンシティブなルーティングを有効にします。</li>
+            <li><em>strict routing</em>: 有効になっている場合、URL末尾の"/(スラッシュ)"は無視されません。</li>
+            <li><em>jsonp callback</em>: <em>res.send()</em> / <em>res.json()</em> における jsonp を透過的にサポートします。</li>
             </ul>
             
             
             <h2 id="routing">ルーティング</h2>
             
-            <p>Expressfは意味のある、そして表現的なルーティングAPIのためにHTTP動詞を利用します。
+            <p>Expressfは明確で表現しやすいルーティングAPIのためにHTTP動詞を利用します。
             たとえば <em>/user/12</em> というパスにユーザーのアカウント情報を表示したいときには以下のようにすれば済みます。
-            <em>app.get()</em> の最初の引数にある ":id" というプレースホルダーには <code>req.params</code> の値が関連付けられます。</p>
+            <em>app.get()</em> の最初の引数にある ":id" というプレースホルダーには <code>req.params</code> の値が紐付けられます。</p>
             
 <pre><code>app.get('/user/:id', function(req, res){
     res.send('user ' + req.params.id);
 });</code></pre>
             
             <p>ルートは内部で正規表現にコンパイルされます。
-            たとえば <em>/user/:id</em> がコンパイルされると、簡素化した正規表現は以下のようになります。</p>
+            たとえば <em>/user/:id</em> がコンパイルされた場合、簡素化した正規表現は以下のようになります。</p>
             
             <pre><code>¥/user¥/([^¥/]+)¥/?</code></pre>
             
-            <p>より複雑な用途のために、正規表現リテラルを直接渡すこともできます。
-            正規表現リテラルによるキャプチャグループは匿名であり、結果には <code>req.params</code> から直接アクセスが可能です。
-            最初のキャプチャグループは <em>req.params[0]</em> となり、続く二つ目は  <em>req.params[1]</em> といった具合になります。</p>
+            <p>より込み入った用途のために、正規表現リテラルを直接渡すこともできます。
+            正規表現リテラルによるキャプチャグループは匿名であり、その結果には <code>req.params</code> から直接アクセスが可能です。
+            最初の要素は <em>req.params[0]</em> となり、続く二つ目は  <em>req.params[1]</em> といった具合です。</p>
             
 <pre><code>app.get(/^¥/users?(?:¥/(¥d+)(?:¥.¥.(¥d+))?)?/, function(req, res){
     res.send(req.params);
@@ -296,7 +304,7 @@ app.configure('production', function(){
 /user/12
 /user/12.json</code></pre>
             
-            <p>JSONを <em>POST</em> し、 JSONのリクエストボディ(その他でも構いません)をパースする <em>bodyParser</em> ミドルウェアを使用して結果のJSONを返す例を考えてみましょう。結果は <em>req.body</em> に格納します。</p>
+            <p>JSONを <em>POST</em> し、 JSONのリクエストボディ(その他でも構いません)をパースする <em>bodyParser</em> ミドルウェアを使用してJSONをレスポンスする例を考えてみましょう。結果は <em>req.body</em> に格納します。</p>
             
 <pre><code>var express = require('express')
     , app = express.createServer();
@@ -309,7 +317,7 @@ app.post('/', function(req, res){
 
 app.listen(3000);</code></pre>
 
-            <p>通常、 "/user/:id" のような制限のないある種「間抜けな」プレースホルダーが使用できますが、たとえばユーザーIDを整数に制限したければ、 <em>/user/:id([0-9]+)</em> とすることで整数のみを含むプレースホルダーの値以外には一致しなくなります。</p>
+            <p>私たちは一般的に、"/user/:id" のような制限のないある種「間抜けな」プレースホルダーを使いがちですが、たとえばユーザーIDを整数に制限したければ、 <em>/user/:id([0-9]+)</em> とすることで整数のみを含むプレースホルダーの値以外には一致しなくなります。</p>
             
             <h2 id="passing-route control">ルート処理の受け渡し</h2>
             
