@@ -1,1 +1,116 @@
-Expressãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ æ—¥æœ¬èªè¨³
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+	<title>Express - node WebƒtƒŒ[ƒ€ƒ[ƒN | “ú–{ŒêƒhƒLƒ…ƒƒ“ƒe[ƒVƒ‡ƒ“</title>
+	<link rel="stylesheet" href="./css/style.css" />
+	<script type="text/javascript" src="./js/jquery/jquery-1.6.1.min.js"></script>
+	<script type="text/javascript">
+	  $(function(){
+	    $('.section').hide();
+	    $('.toggle, a.section-title').toggle(function(){
+	      $(this).siblings('ul').fadeIn(300);
+	      return false;
+	    }, function(){
+	      $(this).siblings('ul').fadeOut(300);
+	      return false;
+	    });
+	  });
+	</script>
+</head>
+<body>
+	<a href="http://github.com/visionmedia/express"> 
+	  <img alt="Fork me on GitHub" id="ribbon" src="images/forkme_right_white_ffffff.png" /> 
+	</a>
+	<div id="wrapper">
+		<div id="container">
+			<a href="http://github.com/visionmedia/express" id="logo">Express</a> 
+			<p id="tagline">ƒnƒCƒpƒtƒH[ƒ}ƒ“ƒXAƒnƒCƒNƒ‰ƒX‚ÈWebŠJ”­‚ğ<a href="http://nodejs.org/">Node.js</a>‚ÉB</p>
+			<ul id="menu">
+				<li><a href="">ƒz[ƒ€</a></li>
+				<li><a href="./guide/">ƒKƒCƒh</a></li>
+				<li><a href="./screencasts/">ƒXƒNƒŠ[ƒ“ƒLƒƒƒXƒg</a></li>
+				<li><a href="./applications/">ƒAƒvƒŠƒP[ƒVƒ‡ƒ“</a></li>
+				<li><a href="./translation/">–|–ó‚É‚Â‚¢‚Ä</a></li>
+			</ul>
+<pre><code>var app = express.createServer();
+
+app.get('/', function(req, res){
+  res.send('Hello World');
+});
+
+app.listen(3000);
+</code></pre>
+
+            <h2>å‚È“Á’¥</h2>
+            
+            <ul>
+                <li>Œ˜˜S‚Èƒ‹[ƒeƒBƒ“ƒO</li>
+                <li>ƒŠƒ_ƒCƒŒƒNƒgEƒwƒ‹ƒp[</li>
+                <li>“®“I‚Èƒrƒ…[ƒwƒ‹ƒp[</li>
+                <li>ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ƒŒƒxƒ‹‚Åİ’è‰Â”\‚Èƒrƒ…[EƒIƒvƒVƒ‡ƒ“</li>
+                <li>ƒRƒ“ƒeƒ“ƒgƒlƒSƒVƒG[ƒVƒ‡ƒ“</li>
+                <li>ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìƒ}ƒEƒ“ƒg</li>
+                <li>‚‚¢ƒpƒtƒH[ƒ}ƒ“ƒX‚Ö‚ÌƒtƒH[ƒJƒX</li>
+                <li>ƒrƒ…[‚Ì•`‰æ‚Æƒp[ƒVƒƒƒ‹‚ÌƒTƒ|[ƒg</li>
+                <li>ŠÂ‹«‚É‚à‚Æ‚Ã‚­\¬</li>
+                <li>ƒZƒbƒVƒ‡ƒ“‚É‚à‚Æ‚Ã‚­ƒtƒ‰ƒbƒVƒ…’Ê’m</li>
+                <li><a href="http://github.com/senchalabs/connect">Connect</a>ã‚É\’z</li>
+                <li><a href="http://expressjs.com/executable.html">Executable</a>‚É‚æ‚é‘f‘‚¢ƒAƒvƒŠƒP[ƒVƒ‡ƒ“¶¬</li>
+                <li>L”Í‚ÈƒeƒXƒg”ÍˆÍ</li>
+            </ul>
+            
+            
+            <h2>ƒRƒ“ƒgƒŠƒrƒ…[ƒ^[</h2>
+            
+            <p>ˆÈ‰º‚ÍExpress‚Ìå‚ÈƒRƒ“ƒgƒŠƒrƒ…[ƒ^‚Å‚·(‡•s“¯)B</p>
+            
+            <ul>
+                <li>TJ Holowaychuk (<a href="http://github.com/visionmedia">visionmedia</a>)</li>
+                <li>Ciaran Jessup (<a href="http://github.com/ciaranj">ciaranj</a>)</li>
+                <li>Aaron Heckmann (<a href="http://github.com/aheckmann">aheckmann</a>)</li>
+                <li>Guillermo Rauch (<a href="http://github.com/guille">guille</a>)</li>
+            </ul>
+            
+            
+            <h2>ƒT[ƒhƒp[ƒeƒBƒ‚ƒWƒ…[ƒ‹</h2>
+            
+            <p>ˆÈ‰º‚Ìƒ‚ƒWƒ…[ƒ‹ŒQ‚ÍExpressŒö”F‚Ì‚à‚Ì‚Å‚·B</p>
+            
+            <ul>
+                <li><a href="http://github.com/visionmedia/express-resource">express-resource</a> - —DG‚Èƒ‹[ƒeƒBƒ“ƒO‹@\‚ğ’ñ‹Ÿ</li>
+                <li><a href="http://github.com/visionmedia/express-messages">express-messages</a> - flash message notification rendering</li>
+                <li><a href="http://github.com/visionmedia/express-configuration">express-configure</a> - ”ñ“¯Šú‚ÈŠÂ‹«İ’è‚ğƒTƒ|[ƒg (load settings from redis etc)</li>
+                <li><a href="http://github.com/visionmedia/express-namespace">express-namespace</a> - –¼‘O‹óŠÔ‚É‚æ‚éƒ‹[ƒeƒBƒ“ƒO‚ğƒTƒ|[ƒg</li>
+            </ul>
+            
+            
+            <h2>‚»‚Ì‘¼‚Ìî•ñ</h2>
+            
+            <ul>
+                <li><a href="http://groups.google.com/group/express-js">Google Group</a>: ƒfƒBƒXƒJƒbƒVƒ‡ƒ“</li>
+                <li><a href="http://twitter.com/tjholowaychuk">tjholowaychuk</a> ‚ğƒtƒHƒ[: ƒAƒbƒvƒf[ƒgî•ñ</li>
+                <li><a href="http://senchalabs.github.com/connect">Connect</a>: Connect‚ÌƒhƒLƒ…ƒƒ“ƒg</li>
+                <li><a href="http://wiki.github.com/senchalabs/connect/">Connect Wiki</a>: contribƒ~ƒhƒ‹ƒEƒFƒA‚É‚Â‚¢‚Ä</li>
+                <li><a href="http://github.com/visionmedia/express/tree/master/examples/">examples</a></li>
+                <li><a href="http://github.com/visionmedia/express">source</a></li>
+                <li><a href="http://expressjs.com/contrib.html">contrib guide</a></li>
+            </ul>
+		</div>
+	</div>
+	<script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-11355664-8']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+</body>
+</html>

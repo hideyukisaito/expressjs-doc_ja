@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <title>Express - node Webフレームワーク | 日本語ドキュメンテーション</title>
+    <link rel="stylesheet" href="js/sh/styles/shCore.css" />
+	<link rel="stylesheet" href="js/sh/styles/shThemeEclipse.css" />
+	<link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/jquery/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery/jquery.smooth-scroll.min.js"></script>
+	<script type="text/javascript">
+        $(function() {
+            $('.section').hide();
+            $('.toggle, a.section-title').toggle(function() {
+                $(this).siblings('ul').fadeIn(300);
+                return false;
+            }, function() {
+                $(this).siblings('ul').fadeOut(300);
+                return false;
+            });
+            $('#toc a').not('.toggle').click(function(e) {
+                e.preventDefault();
+                var href = $(this).attr('href');
+                if (href.indexOf('#') == 0 && href != '#') {
+                    console.log($(href));
+                    $.smoothScroll({
+                        offset: -20,
+                    	scrollTarget: href,
+                    	speed: 800
+                	});
+				}
+            });
+        });
+    </script>
+</head>
+<body>
+    <a href="http://github.com/visionmedia/express"> 
+	   <img alt="Fork me on GitHub" id="ribbon" src="../images/forkme_right_white_ffffff.png"> 
+	</a>
+	
+	<div id="wrapper">
+        <div id="container">
+            <ul id="toc">
+                <li><a href="#installation">インストール</a></li>
+                <li><a href="#creating-a server">サーバーの作成</a></li>
+                <li><a href="#creating-an https server">HTTPSサーバーの作成</a></li>
+                <li><a href="#configuration">環境設定</a></li>
+                <li><a href="#settings">セッティング</a></li>
+                <li><a href="#routing">ルーティング</a></li>
+                <li><a href="#passing-route control">ルート処理の受け渡し</a></li>
+                <li><a href="#middleware">ミドルウェア</a></li>
+                <li><a href="#route-middleware">ルート・ミドルウェア</a></li>
+                <li><a href="#http-methods">HTTPメソッド</a></li>
+                <li><a href="#error-handling">例外処理</a></li>
+                <li><a href="#route-param-pre-conditions">ルート・パラメータの事前処理</a></li>
+                <li><a href="#view-rendering">ビューの表示</a></li>
+                <li><a href="#view-partials">ビュー・パーシャル</a></li>
+                <li><a href="#view-lookup">ビュー・ルックアップ</a></li>
+                <li><a href="#template-engines">テンプレート・エンジン</a></li>
+                <li><a href="#session-support">セッション・サポート</a></li>
+                <li><a href="#migration-guide">移行ガイド</a></li>
+                <li><a href="#api-reference">APIリファレンス</a></li>
+                <li><a class="section-title" href="#">- リクエスト <a href="#" class="toggle">+</a></a>
+                    <ul class="section" id="section-Request" style="display: none; ">
+                        <li><a href="#req-header">header()</a></li>
+                        <li><a href="#req-accepts">accepts()</a></li>
+                        <li><a href="#req-is">is()</a></li>
+                        <li><a href="#req-param">param()</a></li>
+                        <li><a href="#req-flash">flash()</a></li>
+                        <li><a href="#req-isxmlhttprequest">isXMLHttpRequest</a></li>
+                    </ul>
+                </li>
+                <li><a class="section-title" href="#">- レスポンス <a href="#" class="toggle">+</a></a>
+                    <ul class="section" id="section-Response" style="display: none; ">
+                        <li><a href="#res-header">header()</a></li>
+                        <li><a href="#res-charset">charset</a></li>
+                        <li><a href="#res-contenttype">contentType()</a></li>
+                        <li><a href="#res-attachment">attachment()</a></li>
+                        <li><a href="#res-sendfile">sendfile()</a></li>
+                        <li><a href="#res-download">download()</a></li>
+                        <li><a href="#res-send">send()</a></li>
+                        <li><a href="#res-redirect">redirect()</a></li>
+                        <li><a href="#res-cookie">cookie()</a></li>
+                        <li><a href="#res-clearcookie">clearCookie()</a></li>
+                        <li><a href="#res-render">render()</a></li>
+                        <li><a href="#res-partial">partial()</a></li>
+                        <li><a href="#res-local">local()</a></li>
+                        <li><a href="#res-locals">locals()</a></li>
+                    </ul>
+                </li>
+                <li><a class="section-title" href="#">- サーバー <a href="#" class="toggle">+</a></a>
+                    <ul class="section" id="section-Server" style="display: none; ">
+                        <li><a href="#app-set">set()</a></li>
+                        <li><a href="#app-enable">enable()</a></li>
+                        <li><a href="#app-enabled">enabled()</a></li>
+                        <li><a href="#app-disable">disable()</a></li>
+                        <li><a href="#app-disabled">disabled()</a></li>
+                        <li><a href="#app-configure">configure()</a></li>
+                        <li><a href="#app-redirect">redirect()</a></li>
+                        <li><a href="#app-error">error()</a></li>
+                        <li><a href="#app-helpers">helpers()</a></li>
+                        <li><a href="#app-dynamichelpers">dynamicHelpers()</a></li>
+                        <li><a href="#app-lookup">lookup</a></li>
+                        <li><a href="#app-match">match</a></li>
+                        <li><a href="#app-mounted">mounted()</a></li>
+                        <li><a href="#app-register">register()</a></li>
+                        <li><a href="#app-listen">listen()</a></li>
+                    </ul>
+                </li>
+            </ul>
+			<a href="http://github.com/visionmedia/express" id="logo">Express</a> 
+			<p id="tagline">
+			   ハイパフォーマンス、ハイクラスなWeb開発を<a href="http://nodejs.org/">Node.js</a>に。
+			</p>
+			<ul id="menu">
+				<li><a href="../">ホーム</a></li>
+				<li><a href="">ガイド</a></li>
+				<li><a href="../screencasts/">スクリーンキャスト</a></li>
+				<li><a href="../applications/">アプリケーション</a></li>
+				<li><a href="../translation/">翻訳について</a></li>
+			</ul>
+            
+            <h2 id="installation">インストール</h2>
+            
+            <pre><code>$ npm install express</code></pre>
+            
+            <p>またはグローバルオプションを付けてインストールします。</p> 
+            
+            <pre><code>$ npm install -g express</code></pre>
+            
+            <h2 id="quick-start">クイックスタート</h2>
+            
+            <p>expressを始めるもっとも簡単な方法は、<code>express</code> コマンドを利用してアプリケーションを生成することです。</p>
+            
+            <p>アプリケーションの作成:</p> 
+ 
+<pre><code>$ npm install -g express
+$ express /tmp/foo &amp;&amp; cd /tmp/foo
+</code></pre> 
+ 
+<p>依存関係のインストール:</p> 
+ 
+<pre><code>$ npm install -d
+</code></pre> 
+ 
+<p>サーバーの起動:</p> 
+ 
+<pre><code>$ node app.js
+</code></pre> 
+            
+            <h2 id="creating-a server">サーバーの作成</h2>
+            
+            <p><em>express.HTTPServer</em> のインスタンスを生成するには <em>createServer()</em> メソッドを呼び出すだけです。インスタンス <em>app</em> を使って、次の例の <em>app.get()</em> でおこなっているように、HTTP動詞にもとづいてルーティングを定義することができます。</p>
+            
+<pre><code>var app = require('express').createServer();
+
+app.get('/', function(req, res){
+  res.send('hello world');
+});
+
+app.listen(3000);</code></pre>
+            
+            <h2 id="creating-an https server">HTTPSサーバーの作成</h2>
+            
+            <p><em>express.HTTPSServer</em> の初期化は上記の通常のサーバーとほぼ同様ですが、こちらは受け入れる <em>key</em> や <em>cert</em> といったオプションを含むオブジェクトを渡します。その他のオプションについてはnodeの <a href="http://nodejs.org/docs/v0.3.7/api/https.html#https.createServer">httpsドキュメント</a>を 参照してください。</p>
+            
+            <pre><code> var app = require('express').createServer({ key: ... });</code></pre>
+            
+            <h2 id="configuration">環境設定</h2>
+            
+            <p>Expressは <em>production</em> や <em>development</em> といった任意の実行環境をサポートしています。開発者は <em>configure()</em> メソッドを使用することで、現在のモードに必要な設定を行うことが出来ます。<em>configure()</em> が環境名なしで呼ばれた場合、引数に指定したコールバック関数が環境固有のコールバック関数の前に実行されます。</p>
+            
+            <p>以下の例では <em>development</em> モードにのみ、例外発生時のスタックトレースをオンにするため <em>dumpExceptions</em> オプションを <em>true</em> に設定していますが、両モード共通の設定として <em>methodOverride</em> と <em>bodyParser</em> を記述しています。ルーティングに利用できる <em>app.router</em> をここで記述しない場合、最初の <em>app.get()</em> や <em>app.post()</em> その他の呼び出しがパスの割り当ておこないます。</p>
+            
+<pre><code>app.configure(function(){
+    app.use(express.methodOverride());
+    app.use(express.bodyParser());
+    app.use(app.router);
+});
+
+app.configure('development', function(){
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+
+app.configure('production', function(){
+  var oneYear = 31557600000;
+  app.use(express.static(__dirname + '/public', { maxAge: oneYear }));
+  app.use(express.errorHandler());
+});</code></pre>
+            
+            <p>類似する環境向けに、複数の環境名の文字列を渡すこともできます。</p>
+            
+<pre><code>app.configure('stage', 'prod', function(){
+  // config
+});</code></pre>
+            
+            <p>環境内部の任意の設定のために、<em>set(key[, val])</em>, <em>enable(key)</em>, <em>disable(key)</em> などのメソッドを提供しています。</p>
+            
+<pre><code>app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('views');
+  // =&gt; "/absolute/path/to/views"
+  
+  app.enable('some feature');
+  // same as app.set('some feature', true);
+
+  app.disable('some feature');
+  // same as app.set('some feature', false);
+
+  app.enabled('some feature')
+  // =&gt; false
+});</code></pre>
+            
+            <p><em>NODE_ENV</em> の値をセットすることで、実行環境を変更できます。</p>
+            
+            <pre><code>$ NODE_ENV=production node app.js</code></pre>
+            
+            <p>そして、これは <em>非常に</em> 重要なことですが, 多くのキャッシュ機構は production 環境<em>のみ</em>で有効です。</p>
+
+            <h2 id="settings">セッティング</h2>
+            
+            <p>Expressは以下のセッティングをサポートしています。</p>
+            
+            <ul>
+            <li><em>home</em>: <em>res.redirect()</em> により参照されるアプリケーションのベースパスで、マウントされたアプリケーションを透過的にハンドリングします。</li>
+            <li><em>views</em>: <strong>CWD/views</strong> を規定する、Viewファイルのルートパスです。</li>
+            <li><em>view engine</em>: ビューの表示に使用されるデフォルトのビューエンジンの名前です。</li>
+            <li><em>view options</em>: ビュー全体のオプションを指定するオブジェクトです。</li>
+            <li><em>view cache</em>: ビューのキャッシュを有効にします( <em>production</em> モードでのみ有効)</li>
+            <li><em>case sensitive routes</em>: ケースセンシティブなルーティングを有効にします。</li>
+            <li><em>strict routing</em>: 有効になっている場合、URL末尾の"/(スラッシュ)"は無視されません。</li>
+            <li><em>jsonp callback</em>: <em>res.send()</em> / <em>res.json()</em> における jsonp を透過的にサポートします。</li>
+            </ul>
+            
+            
+            <h2 id="routing">ルーティング</h2>
+            
+            <p>Expressfは明確で表現しやすいルーティングAPIのためにHTTP動詞を利用します。
+            たとえば <em>/user/12</em> というパスにユーザーのアカウント情報を表示したいときには以下のようにすれば済みます。
+            <em>app.get()</em> の最初の引数にある ":id" というプレースホルダーには <code>req.params</code> の値が紐付けられます。</p>
+            
+<pre><code>app.get('/user/:id', function(req, res){
+    res.send('user ' + req.params.id);
+});</code></pre>
+            
+            <p>ルートは内部で正規表現にコンパイルされます。
+            たとえば <em>/user/:id</em> がコンパイルされた場合、簡素化した正規表現は以下のようになります。</p>
+            
+            <pre><code>¥/user¥/([^¥/]+)¥/?</code></pre>
+            
+            <p>より込み入った用途のために、正規表現リテラルを直接渡すこともできます。
+            正規表現リテラルによるキャプチャグループは匿名であり、その結果には <code>req.params</code> から直接アクセスが可能です。
+            最初の要素は <em>req.params[0]</em> となり、続く二つ目は  <em>req.params[1]</em> といった具合です。</p>
+            
+<pre><code>app.get(/^¥/users?(?:¥/(¥d+)(?:¥.¥.(¥d+))?)?/, function(req, res){
+    res.send(req.params);
+});</code></pre>
+            
+            <p>さきほど定義したルートに対するCurlリクエスト:</p>
+            
+<pre><code>$ curl http://dev:3000/user
+   [null,null]
+   $ curl http://dev:3000/users
+   [null,null]
+   $ curl http://dev:3000/users/1
+   ["1",null]
+   $ curl http://dev:3000/users/1..15
+   ["1","15"]</code></pre>
+            
+            <p>以下はルーティングと、関連付けられたパスのいくつかの例です。</p>
+            
+<pre><code>"/user/:id"
+/user/12
+
+"/users/:id?"
+/users/5
+/users
+
+"/files/*"
+/files/jquery.js
+/files/javascripts/jquery.js
+
+"/file/*.*"
+/files/jquery.js
+/files/javascripts/jquery.js
+
+"/user/:id/:operation?"
+/user/1
+/user/1/edit
+
+"/products.:format"
+/products.json
+/products.xml
+
+"/products.:format?"
+/products.json
+/products.xml
+/products
+
+"/user/:id.:format?"
+/user/12
+/user/12.json</code></pre>
+            
+            <p>JSONを <em>POST</em> し、 JSONのリクエストボディ(その他でも構いません)をパースする <em>bodyParser</em> ミドルウェアを使用してJSONをレスポンスする例を考えてみましょう。結果は <em>req.body</em> に格納します。</p>
+            
+<pre><code>var express = require('express')
+    , app = express.createServer();
+
+app.use(express.bodyParser());
+
+app.post('/', function(req, res){
+  res.send(req.body);
+});
+
+app.listen(3000);</code></pre>
+
+            <p>私たちは一般的に、"/user/:id" のような制限のないある種「間抜けな」プレースホルダーを使いがちですが、たとえばユーザーIDを整数に制限したければ、 <em>/user/:id([0-9]+)</em> とすることで整数のみを含むプレースホルダーの値以外には一致しなくなります。</p>
+            
+            <h2 id="passing-route control">ルート処理の受け渡し</h2>
+            
+            <p>3番目の引数として渡される <em>next()</em> メソッドを呼び出すことによって、
+            次に一致するルートに処理を渡すことができます。一致しなかった場合、Connect へと処理が戻され、
+            <em>use()</em> によって追加された順に従ってミドルウェアの呼び出しが続けられます。
+            定義されたパスと同じパスを持ついくつかのルートについても同じことが言えて、
+            それらは単純に <em>next()</em> の呼び出しが無くなるまで順番に実行され、応答先を決定します。</p>
+            
+<pre><code>app.get('/users/:id?', function(req, res, next){
+    var id = req.params.id;
+    if (id) {
+        // do something
+    } else {
+        next();
+    }
+});
+
+app.get('/users', function(req, res){
+    // do something else
+});</code></pre>
+            
+            <p><em>app.all()</em> は同様のロジックを1回の呼び出しですべてのHTTP動詞に適用するのに役立つメソッドです。次の例は仮想のデータベースからユーザーを読み出し、それを <em>req.user</em> に割り当てるものです。</p>
+            
+<pre><code>var express = require('express')
+  , app = express.createServer();
+
+var users = [{ name: 'tj' }];
+
+app.all('/user/:id/:op?', function(req, res, next){
+  req.user = users[req.params.id];
+  if (req.user) {
+    next();
+  } else {
+    next(new Error('cannot find user ' + req.params.id));
+  }
+});
+
+app.get('/user/:id', function(req, res){
+  res.send('viewing ' + req.user.name);
+});
+
+app.get('/user/:id/edit', function(req, res){
+  res.send('editing ' + req.user.name);
+});
+
+app.put('/user/:id', function(req, res){
+  res.send('updating ' + req.user.name);
+});
+
+app.get('*', function(req, res){
+  res.send('what???', 404);
+});
+
+app.listen(3000);</code></pre>
+            
+            <h2 id="middleware">ミドルウェア</h2>
+            
+            <p><a href="http://github.com/senchalabs/connect">Connect</a> を通して使用可能なミドルウェアを <em>express.createServer()</em> の呼び出し時に渡すことができます。 例を示します。</p>
+            
+<pre><code>var express = require('express');
+var app = express.createServer(
+    express.logger()
+  , express.bodyParser()
+);</code></pre>
+            
+            <p>もうひとつ、一歩進んだやり方として、<em>configure()</em> ブロック内で <em>use()</em> を使いそれらを追加する方法があります。</p>
+            
+            <pre><code>app.use(express.logger({ format: ':method :uri' }));</code></pre>
+            
+            <p>通常、connect ミドルウェアを使用する際は <em>require(‘connect’)</em> を記述します。</p>
+            
+<pre><code>var connect = require('connect');
+app.use(connect.logger());
+app.use(connect.bodyParser());</code></pre>
+            
+            <p>これはしばしば悩ましいことなのですが、Expressはこれらのミドルウェアが全く同じものだとしても、それを再びエクスポートします。このことにより、以下の例もまた可能になっています。</p>
+            
+<pre><code>app.use(express.logger());
+app.use(express.bodyParser());</code></pre>
+            
+            <p>ミドルウェアの順番は重要です。Connect がリクエストを受け取ったとき、私たちが <em>createServer()</em> または <em>use()</em> を使って渡した<em>最初の</em>ミドルウェアが3つのパラメータと共に実行されます。それは <em>request</em>、<em>response</em>、そしてしばしば <em>next</em> という名前が付けられるコールバック関数です。<em>next()</em> が二つ目のミドルウェアを起動するとき、それは順番などを持つでしょう。これは重要な注意事項です。なぜなら多くのミドルウェアの間には依存関係が存在するからです。たとえば <em>bodyParser()</em> がリクエストボディをパースして <em>req.body</em> にデータを格納し、<em>methodOverride()</em> は HTTPメソッドのオーバーライドのために <em>req.body</em> の持つメソッドをチェックする、といった具合です。これについてのもうひとつの例はクッキーのパースとセッションのサポートで、私たちは最初に必ず <em>use()</em> で <em>cookieParser()</em> を追加し、その後に <em>session()_</em> を呼び出す必要があります。</p>
+            
+            <p>ここで、多くのExpressアプリケーションが <em>app.use(app.router)</em> の一行を含んでいることを不思議に思われるかもしれません。それは単に、定義された全てのルートを含むミドルウェアの機能であり、現在のリクエストURLとHTTPメソッドにもとづいてルートルックアップを実行するものです。あなたはこのミドルウェアを自由にポジショニングできます。もっとも、デフォルトでは下方に加えられます。<br />
+            ルーターをポジショニングすることによって、ミドルウェアの優先順位を変更することが可能になり、たとえば最後のミドルウェアとしてエラー報告を追加した場合、<em>next()</em> に渡された例外をそのミドルウェアによってハンドリングすることができます。また、静的なファイルサーブを低い優先順位で行う、静的なファイルのダウンロード数をカウントするために任意のルートをリクエストに割り込ませる、なども考えられるでしょう。少し例をお見せしましょう。</p>
+            
+<pre><code>app.use(express.logger(...));
+app.use(express.bodyParser(...));
+app.use(express.cookieParser(...));
+app.use(express.session(...));
+app.use(app.router);
+app.use(express.static(...));
+app.use(express.errorHandler(...));</code></pre>
+            
+            <p>まず最初に node の <em>req.end()</em> メソッドをラップする <em>logger()</em> を追加し、レスポンスタイムのデータを提供させます。次にリクエストボディがパースされ、その後にクッキーのパースとセッションのサポートが続きます。これは <em>app.router</em> に含まれるルートに行き当たったときに <em>req.session</em> が定義されることを意味します。もし <em>GET /javascripts/jquery.js</em> のようなリクエストが私たちのルートでハンドルされた場合、そして <em>next()</em> を呼ばなかった場合、たとえ以下のようにルートを定義していたとしても <em>static()</em> ミドルウェアがこのリクエストに出会うことはなく、ステータスの記録やダウンロードの拒否、ダウンロードクレジットの消費などを行なうことができます。</p>
+            
+<pre><code>var downloads = {};
+
+app.use(app.router);
+app.use(express.static(__dirname + '/public'));
+
+app.get('/*', function(req, res, next){
+  var file = req.params[0];
+  downloads[file] = downloads[file] || 0;
+  downloads[file]++;
+  next();
+});</code></pre>
+            
+            <h2 id="route-middleware">ルート・ミドルウェア</h2>
+            
+            <p>各ルートは、メソッドにひとつかそれ以上のコールバック(あるいはそれらの配列)を渡すことによって、
+            そのルートに即したミドルウェアを利用することができます。この機能はアクセスの制限や、
+            ルートに必要なデータの読み込みなどに非常に役立ちます。</p>
+            
+            <p>通常、パラメータ <em>:id</em> を受け取りユーザーの読み込みを試みるといった
+            非同期なデータの取得は以下のようになります。</p>
+            
+<pre><code>app.get('/user/:id', function(req, res, next){
+  loadUser(req.params.id, function(err, user){
+    if (err) return next(err);
+    res.send('Viewing user ' + user.name);
+  });
+});</code></pre>
+            
+            <p>無駄をなくし、可読性を上げるため、このロジックをミドルウェアとして適用することにしましょう。
+            ご覧のとおり、このロジックをミドルウェアの中へ抽象化することでその再利用を可能にし、
+            同時にルートにおける処理を簡潔にしています。</p>
+            
+<pre><code>function loadUser(req, res, next) {
+  // You would fetch your user from the db
+  var user = users[req.params.id];
+  if (user) {
+    req.user = user;
+    next();
+  } else {
+    next(new Error('Failed to load user ' + req.params.id));
+  }
+}
+
+app.get('/user/:id', loadUser, function(req, res){
+  res.send('Viewing user ' + req.user.name);
+});</code></pre>
+            
+            <p>ルート・ミドルウェアは複数適用することもできます。
+            それらは順番に実行され、ユーザーアカウントに対するアクセス制限といったようなさらなるロジックの適用を可能にします。
+            次の例では、認証されたユーザーのみに彼/彼女のアカウントの編集を許可します。</p>
+            
+<pre><code>function andRestrictToSelf(req, res, next) {
+  req.authenticatedUser.id == req.user.id
+    ? next()
+    : next(new Error('Unauthorized'));
+}
+
+app.get('/user/:id/edit', loadUser, andRestrictToSelf, function(req, res){
+  res.send('Editing user ' + req.user.name);
+});</code></pre>
+            
+            <p>覚えておいていただきたいのは、ミドルウェアは単なる関数であるということです。
+            よって以下に示すように、さらにミドルウェアを返す関数を定義することでより柔軟なソリューションを作り出すことができます。</p>
+            
+<pre><code>function andRestrictTo(role) {
+  return function(req, res, next) {
+    req.authenticatedUser.role == role
+      ? next()
+      : next(new Error('Unauthorized'));
+  }
+}
+
+app.del('/user/:id', loadUser, andRestrictTo('admin'), function(req, res){
+  res.send('Deleted user ' + req.user.name);
+});</code></pre>
+            
+            <p>共通して使用されるミドルウェア群を配列として渡すことができます。
+            これらは混在可能で、再帰的に適用されます。以下の例を見てください。</p>
+            
+<pre><code>var a = [middleware1, middleware2]
+  , b = [middleware3, middleware4]
+  , all = [a, b];
+
+app.get('/foo', a, function(){});
+app.get('/bar', a, function(){});
+
+app.get('/', a, middleware3, middleware4, function(){});
+app.get('/', a, b, function(){});
+app.get('/', all, function(){});</code></pre>
+            
+            <p>この完全な例は、リポジトリにある <a href="http://github.com/visionmedia/express/blob/master/examples/route-middleware/app.js">route middleware example</a> を参照してください。</p>
+            
+            <p>残りのミドルウェアをスキップさせたいことがあると思いますが、後続のルートに対するマッチングは継続されます。
+            これを行う場合、<em>next()</em> を文字列の "route" とともに <em>next('route')</em> というように呼び出します。
+            残りのルートがどれもリクエストURLにマッチしない場合、Expressは 404 Not Found で応答します。</p>
+
+            <h2 id="http-methods">HTTPメソッド</h2>
+            
+            <p>ここまでで何回か <em>app.get()</em> というメソッドを目にしてきましたが、Expressではその他のおなじみのHTTP動詞についても、<em>app.post()</em> や <em>app.del()</em> といったように同様の形式で扱うことが可能です。</p>
+            
+            <p>フォームを送信したときの <em>POST</em> の使い方の共通の例を紹介します。以下のように、メソッドを "post" にセットしたシンプルなフォームをhtmlの中に置きます。そしてさらにその下で定義するルートに処理が回されます。</p>
+            
+<pre><code>&lt;form method="post" action="/"&gt;
+     &lt;input type="text" name="user[name]" /&gt;
+     &lt;input type="text" name="user[email]" /&gt;
+     &lt;input type="submit" value="Submit" /&gt;
+&lt;/form&gt;</code></pre>
+            
+            <p>デフォルトの状態ではExpressはこのリクエストボディに対して何をすべきか知りません。そのため、<em>application/x-www-form-urlencoded</em> と <em>application/json</em> リクエストボディをパースする <em>bodyParser</em> ミドルウェアを追加し、<em>req.body</em> にパラメータを配置する必要があります。これにはまず、以下のようにして <em>bodyParser</em> を使用することを伝えます。</p>
+            
+            <pre><code>app.use(express.bodyParser());</code></pre>
+            
+            <p>これで <em>req.body.user</em> にアクセスできるようになりました。これには <em>name</em> と <em>email</em> が格納されています。</p>
+            
+<pre><code>app.post('/', function(req, res){
+  console.log(req.body.user);
+  res.redirect('back');
+});</code></pre>
+            
+            <p>フォームにおいて <em>PUT</em> のようなメソッドを使ったとき、隠されたインプットである <em>_method</em> をHTTPメソッドの変更に利用することができます。これを行うには、まず <em>methodOverride</em> ミドルウェアを <em>bodyParser</em> の下に置く必要があります。これによりフォームの値を含む <em>req.body</em> の利用が可能になります。</p>
+            
+<pre><code>app.use(express.bodyParser());
+app.use(express.methodOverride());</code></pre>
+            
+            <p>これが常にデフォルトになっていない理由は単純です。Expressが完全に機能するために、これらは必ずしも必要ではないからです。アプリケーションのニーズによってはこれらはまったく必要とされず、<em>PUT</em> や <em>DELETE</em> といったメソッドは、それらを使用するクライアントにより依然として直接アクセス可能となります。とはいえ、<em>methodOverride</em> がフォームに優れたソリューションをもたらすことは確かです。以下に、<em>PUT</em> での使い方をお見せしましょう。</p>
+            
+<pre><code>&lt;form method="post" action="/"&gt;
+  &lt;input type="hidden" name="_method" value="put" /&gt;
+  &lt;input type="text" name="user[name]" /&gt;
+  &lt;input type="text" name="user[email]" /&gt;
+  &lt;input type="submit" value="Submit" /&gt;    
+&lt;/form&gt;
+app.put('/', function(){
+    console.log(req.body.user);
+    res.redirect('back');
+});</code></pre>
+            
+            <h2 id="error-handling">例外処理</h2>
+            
+            <p><em>app.error()</em> メソッドや <em>next(err)</em> といった方法でルート内で発生した例外を受け取ることができます。
+            以下はアドホックな <em>NotFound</em> という例外にもとづいて違うページをサーブする例です。</p>
+            
+<pre><code>function NotFound(msg){
+  this.name = 'NotFound';
+  Error.call(this, msg);
+  Error.captureStackTrace(this, arguments.callee);
+}
+
+NotFound.prototype.__proto__ = Error.prototype;
+
+app.get('/404', function(req, res){
+  throw new NotFound;
+});
+
+app.get('/500', function(req, res){
+  throw new Error('keyboard cat!');
+});</code></pre>
+            
+            <p>しばしば以下のように <em>app.error()</em> を呼び出すことも可能です。
+            ここでは <em>NotFound</em> のインスタンスであるかをチェックし、そうであった場合は404ページを、
+            そうでない場合は次のエラーハンドラに処理を渡します。</p>
+            
+            <p>これらのハンドラはあらゆる場所で定義できることを覚えておいてください。
+            <em>listen()</em> におけるルートハンドラの中に置くことも可能です。
+            これは <em>configure()</em> ブロック内での定義も可能であることを意味し、よって
+            環境にもとづいて違った方法の例外処理を行なうことができます。</p>
+            
+<pre><code>app.error(function(err, req, res, next){
+    if (err instanceof NotFound) {
+        res.render('404.jade');
+    } else {
+        next(err);
+    }
+});</code></pre>
+            
+            <p>ここで簡潔さのため、すべてのエラーを500と仮定しますが、お好きなものを選んでもらっても構いません。
+            以下の例は、nodeがファイルシステムに対してシステムコールをおこなった際に 
+            "no such file or directory" を意味する <em>ENOENT</em> が入った <em>error.code</em> を
+            ともなう例外オブジェクトを受け取った場合の処理です。
+            このオブジェクトを利用して例外処理を行うことができ、必要であればその例外固有のページを表示します。</p>
+            
+<pre><code>app.error(function(err, req, res){
+  res.render('500.jade', {
+     error: err
+  });
+});</code></pre>
+            
+            <p>また、Connectの <em>errorHandler</em> ミドルウェアを利用することもできます。
+            "development" モードにおいて <em>標準エラー出力</em> へ例外を出力したい場合は次のようにすることが可能です。</p>
+            
+            <pre><code>app.use(express.errorHandler({ dumpExceptions: true }));</code></pre>
+            
+            <p>開発中、例外を表示する整ったhtmlページもまた欲しくなることでしょう。
+            そんなときは <em>showStack</em> を true にセットします。</p>
+            
+            <pre><code>app.use(express.errorHandler({ showStack: true, dumpExceptions: true }));</code></pre>
+            
+            <p><em>Accept: application/json</em> が与えられた場合、
+            <em>errorHandler</em> ミドルウェアは <em>json</em> で応答することもできます。
+            クライアントサイドに強く依存するアプリケーションの開発中にはこの方法が役に立ちます。</p>
+            
+            <h2 id="route-param-pre-conditions">ルート・パラメータの事前処理</h2>
+            
+            <p>ルート・パラメータの事前処理は、データの暗黙的な読み込みとリクエストURLのバリデーションを通して
+            アプリケーションの可読性を大幅に改善します。
+            たとえば <em>/user/:id</em> にユーザーを読み込むといったように、いくつかのルートに対して
+            共通のデータをコンスタントにフェッチしたいとします。普通なら私たちは以下のような処理をするでしょう。</p>
+            
+<pre><code>app.get('/user/:userId', function(req, res, next){
+  User.get(req.params.userId, function(err, user){
+    if (err) return next(err);
+    res.send('user ' + user.name);
+  });
+}); </code></pre>
+            
+            <p>事前処理では、バリデーションや型強制、データベースからのデータの読み込みといった処理を実行するコールバックを各パラメータに割り当てることができます。以下ではご覧のとおり、プレースホルダ値を含む <em>id</em> アーギュメントを受け取り、いくつかのミドルウェアに割り振りたいパラメータ名とともに <em>app.param()</em> を呼び出しています。これを使ってユーザーの読み込みとエラーハンドリングをいつも通りに行い、ただ <em>next()</em> を呼び出すだけで次の事前処理、またはルートハンドラにコントロールを渡します。</p>
+            
+<pre><code>app.param('userId', function(req, res, next, id){
+  User.get(id, function(err, user){
+    if (err) return next(err);
+    if (!user) return next(new Error('failed to find user'));
+    req.user = user;
+    next();
+  });
+});</code></pre>
+            
+            <p>こうすることで、ルーティングにおける可読性が大幅に向上し、このロジックをアプリケーション全体にわたって共有することが容易となります。</p>
+            
+<pre><code>app.get('/user/:userId', function(req, res){
+  res.send('user ' + req.user.name);
+});</code></pre>
+            
+            <p>ルートにおけるプレースホルダのバリデーションと型強制といったシンプルなケースでは、ただ単に引数を1つだけ受け入れるコールバックを渡すだけで事足ります。例外がスローされたら <em>next(err)</em> に渡してしまえばいいのです。</p>
+            
+            <pre><code>app.param('number', function(n){ return parseInt(n, 10); });</code></pre>
+            
+            <p>また、同じコールバックを複数のプレースホルダに割り当てることもできます。たとえば GET <em>/commits/:from-:to</em> といった例では2つのプレースホルダには両方とも数字が入るので、それらを配列として定義できます</p>
+            
+            <pre><code>app.param(['from', 'to'], function(n){ return parseInt(n, 10); });</code></pre>
+            
+            <h2 id="view-rendering">ビューの表示</h2>
+            
+            <p>ビューファイルの名前は "&lt;name&gt;.&lt;engine&gt;" という形式を取ります。&lt;engine&gt; は必要とされるであろうモジュールの名前です。たとえば <em>layout.ejs</em> というビューは  <em>require(‘ejs’)</em> が必要であることを教えてくれます。また、読み込まれているモジュールは <em>exports.compile(str, options)</em> メソッドをエクスポートする必要があり、そしてExpressの仕様に準拠するため、戻り値として <em>Function</em> を返します。この振る舞いを変更するには、 <em>app.register()</em> を使用してファイル拡張子とエンジンとの対応付けをします。"foo.html" は ejs によってレンダリングされるといったように、です。</p>
+            
+            <p>下記は <a href="http://github.com/visionmedia/jade">Jade</a> を使用して <em>index.html</em> を書きだす例で、 <em>layout: false</em> 使わない限り <em>index.jade</em> の 書き出された内容は <em>body</em> というローカル変数として <em>layout.jade</em> に渡されます。</p>
+            
+<pre><code>app.get('/', function(req, res){
+    res.render('index.jade', { title: 'My Site' });
+});</code></pre>
+            
+            <p><em>view engine</em> の設定により、デフォルトのテンプレートエンジンを指定することが可能です。<br />
+            Jadeを使用する場合、次のようにします。</p>
+            
+            <pre><code>app.set('view engine', 'jade');</code></pre>
+            
+            <p>これでJadeでの書き出しが有効となりました。</p>
+            
+            <pre><code>res.render('index');</code></pre>
+            
+            <p>または</p>
+            
+            <pre><code>res.render('index.jade');</code></pre>
+            
+            <p><em>view engine</em> がセットされているときは拡張子は完全にオプションとなりますが、以降もテンプレートエンジンを混在させて一致させることができます。</p>
+            
+            <pre><code>res.render('another-page.ejs');</code></pre>
+            
+            <p>Expressはまた、ビューの描画の度に適用される <em>view options</em> の設定も提供します。たとえばレイアウトをほとんど使わない場合は次のようにセットできるでしょう。</p>
+            
+<pre><code>app.set('view options', {
+  layout: false
+});</code></pre>
+            
+            <p>必要であれば、これは <em>res.render()</em> の呼び出し時にオーバーライドすることができます。</p>
+            
+            <pre><code>res.render('myview.ejs', { layout: true });</code></pre>
+            
+            <p>代わりのレイアウトが必要なときにはそのパスを指定することも可能です。たとえば <em>view engine</em> が <em>jade</em> に設定されており、ファイル名が <em>./views/mylayout.jade</em> であった場合、ただこのように渡すだけです。</p>
+            
+            <pre><code>res.render('page', { layout: 'mylayout' });</code></pre>
+            
+            <p>あるいは拡張子を指定します。</p>
+            
+            <pre><code>res.render('page', { layout: 'mylayout.jade' });</code></pre>
+            
+            <p>これらのパスもまた完全なものです。</p>
+            
+            <pre><code>res.render('page', { layout: __dirname + '/../../mylayout.jade' });</code></pre>
+            
+            <p>ここでのよい例を紹介します。<em>ejs</em> にカスタムのオープン&クローズタグを与える方法です。</p>
+            
+<pre><code>app.set('view options', {
+    open: '{{',
+    close: '}}'
+});</code></pre>
+
+            <h2 id="view-partials">ビュー・パーシャル</h2>
+            
+            <p>Expressのビューシステムは、ドキュメントの断片を表す「小さな」ビューであるパーシャルとコレクションをビルトインでサポートしています。たとえばコメントを表示するためにビューの中で反復を使うようりはむしろ、パーシャルのコレクションを使用するべきでしょう。</p>
+            
+            <pre><code>partial('comment', { collection: comments });</code></pre>
+            
+            <p>他にオプションが無いかローカル変数が望まれる場合、オブジェクトは省略可能であり、ただ配列を渡すだけとなります。次の記述は上の例と等価です。</p>
+            
+            <pre><code>partial('comment', comments);</code></pre>
+            
+            <p>パーシャルのコレクションを使用しているとき、自由に使用できる「魔法の」ローカル変数が提供されます。</p>
+            
+            <ul>
+            <li><em>firstInCollection</em>: これが最初のオブジェクトなら true</li>
+            <li><em>indexInCollection</em>: コレクション内でのオブジェクトのインデックス</li>
+            <li><em>lastInCollection</em>: これが最後のオブジェクトなら true</li>
+            <li><em>collectionLength</em>: コレクションの長さ</li>
+            </ul>
+            
+            
+            <p>渡された(または生成された)ローカル変数は、親のビューに渡されたローカルオブジェクトが子のビューで有効であっても優先されます。例として、<em>partial(‘blog/post’, post)</em> を使いブログ記事を表示する場合、<em>post</em> というローカルオブジェクトが生成されますが、この関数を呼び出したビューは <em>user</em> というローカルオブジェクトを持っており、それは <em>blog/post</em> ビューで同様に利用出来るようになります。</p>
+            <p>原文:<br />
+            Local variables passed (or generated) take precedence, however locals passed to the parent view are available in the child view as well. So for example if we were to render a blog post with <em>partial(‘blog/post’, post)</em> it would generate the <em>post</em> local, but the view calling this function had the local <em>user</em>, it would be available to the <em>blog/post</em> view as well.</p>
+            
+            <p>オブジェクトの名前を変更する方法については <a href="http://expressjs.com/guide.html#res-partial-view-options-">res.partial()</a> のドキュメントを参照してください。</p>
+            
+            <p><strong>ノート:</strong> パーシャルのコレクションを使用する際、長さが100の配列をレンダリングするということが100のビューをレンダリングしなければならないことを意味する点に注意してください。
+            シンプルなコレクションについては、パーシャルのコレクションのサポートの代わりにインラインのイテレーションを使用したほうがオーバヘッドを減らせます。</p>
+            
+            <h2 id="view-lookup">ビュー・ルックアップ</h2>
+            
+            <p>ビュー・ルックアップは親のビューを基準として振る舞います。
+            たとえば <em>views/user/list.jade</em> というビューページがあり、
+            その中では <em>partial(‘edit’)</em> として <em>views/user/edit.jade</em> の読み込みをおこなう一方、
+            <em>partial(‘../messages’)</em> という記述によって <em>views/messages.jade</em> を読み込みます。</p>
+            
+            <p>ビュー・システムはまたインデックステンプレートもサポートしています。
+            同名のディレクトリ下に "index.*" を置くことでこの機能を使用します。
+            たとえばルート内で <em>res.render(‘users’)</em> とする際、 <em>views/users.jade</em> または <em>views/users/index.jade</em> のどちらのディレクトリ構成も許可されます。</p>
+            
+            <p>インデックスビューを使用して同じディレクトリ内のビューファイルから <em>partial(‘users’)</em> として <em>views/users/index.jade</em> を参照しようとするとき、ビュー・システムは私たちが <em>partial(‘index’)</em> を呼び出すことなく <em>../users/index</em> でパスの解決を試みます。</p>
+
+            <h2 id="template-engines">テンプレートエンジン</h2>
+            
+            <p>以下はExpressで使用できるテンプレートエンジンの一例です。</p>
+            
+            <ul>
+            <li><a href="http://github.com/visionmedia/haml.js">Haml</a> haml implementation</li>
+            <li><a href="http://jade-lang.com/">Jade</a> haml.js successor</li>
+            <li><a href="http://github.com/visionmedia/ejs">EJS</a> Embedded JavaScript</li>
+            <li><a href="http://github.com/mauricemach/coffeekup">CoffeeKup</a> CoffeeScript based templating</li>
+            <li><a href="https://github.com/kof/node-jqtpl">jQuery Templates</a> for node</li>
+            </ul>
+            
+            
+            <h2 id="session-support">セッションサポート</h2>
+            
+            <p>セッションサポートは、<a href="http://senchalabs.github.com/connect/">Connect</a> の <em><a href="http://senchalabs.github.com/connect/middleware-session.html">session</a></em> ミドルウェアを使用することで可能になります。また先に述べた、 <em>req.cookies</em> に対してクッキーのデータを解析・配置する <em>cookieParser</em> ミドルウェアも必要となります。</p>
+            
+<pre><code>app.use(express.cookieParser());
+app.use(express.session({ secret: "keyboard cat" }));</code></pre>
+            
+            <p>デフォルトでは <em>session</em> ミドルウェアは Connect にバンドルされたメモリーストアを使用しますが、セッション上でのメモリーストアには多くの実装が存在します。たとえば <a href="http://github.com/visionmedia/connect-redis">connect-redis</a> は <a href="http://code.google.com/p/redis/">Redis</a> スタイルのセッションストアを提供し、以下のように使用することができます。</p>
+            
+<pre><code>var RedisStore = require('connect-redis');
+app.use(express.cookieParser());
+app.use(express.session({ secret: "keyboard cat", store: new RedisStore }));</code></pre>
+            
+            <p>これで <em>req.session</em> と <em>req.sessionStore</em> プロパティはすべてのルートと、あとに続くミドルウェアにアクセスできるようになります。<em>req.session</em> 上のプロパティはレスポンス発行時に自動的に保存されるため、たとえばショッピングカートのデータを使用したい場合は以下のようになります。</p>
+            
+<pre><code>var RedisStore = require('connect-redis');
+app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.session({ secret: "keyboard cat", store: new RedisStore }));
+
+app.post('/add-to-cart', function(req, res){
+  // フォームを使っていくつかのアイテムを送信した場合
+  // (bodyParser() ミドルウェアを使用)
+  var items = req.body.items;
+  req.session.items = items;
+  res.redirect('back');
+});
+
+app.get('/add-to-cart', function(req, res){
+  // /add-to-cart へリダイレクトで戻った際、適切なメッセージを表示するために
+  // req.session.items &amp;&amp; req.session.items.length をチェックできます。
+  if (req.session.items &amp;&amp; req.session.items.length) {
+    req.flash('info', 'You have %s items in your cart', req.session.items.length);
+  }
+  res.render('shopping-cart');
+});</code></pre>
+            
+            <p><em>req.session</em> オブジェクトはまた <em>Session#touch()</em>や<em>Session#destroy()</em>、<em>Session#regenerate()</em> といったメソッドを持ち、これらはとりわけセッションの管理と操作に力を発揮します。さらなる情報は <a href="http://senchalabs.github.com/connect/middleware-session.html">Connect Session</a> のドキュメントを参照してください。</p>
+
+            <h2 id="migration-guide">移行ガイド</h2>
+            
+            <p>Express 1.x系の開発者は、アプリケーションをExpress 2.x、Connect 1.x、そしてNode 0.4.xへ向けてアップグレードする方法について詳しく知るために <a href="http://expressjs.com/migrate.html">Migration Guide</a> を参照するといいでしょう。</p>
+            
+            <h2 id="api-reference">APIリファレンス</h2>
+            <h3 id="req-header">req.header(key[, defaultValue])</h3>
+            
+            <p>オプションのデフォルト値とともに、大/小文字を区別しないキーによってリクエストヘッダを取得します。</p>
+            
+<pre><code>req.header('Host');
+req.header('host');
+req.header('Accept', '*/*');</code></pre>
+            
+            <p><em>Referrer</em> と <em>Referer</em> フィールドは特別で、それぞれ以下のように動作します。</p>
+            
+<pre><code>// sent Referrer: http://google.com
+
+req.header('Referer');
+// =&gt; "http://google.com"
+
+req.header('Referrer');
+// =&gt; "http://google.com"</code></pre>
+            
+            <h3 id="req-accepts">req.accepts(type)</h3>
+            
+            <p><em>Accept</em> ヘッダが存在しているかどうか、また指定された <em>type</em> が含まれているかをチェックします。</p>
+            
+            <p><em>Accept</em> が存在しない場合は <em>true</em> を返します。指定された <em>type</em> がサブタイプを含め正確に一致する場合も同様です。"html"というサブタイプを渡した場合、内部でMIMEルックアップテーブルを使用して"text/html"に変換されます。</p>
+            
+<pre><code>// Accept: text/html
+req.accepts('html');
+// =&gt; true
+
+// Accept: text/*; application/json
+req.accepts('html');
+req.accepts('text/html');
+req.accepts('text/plain');
+req.accepts('application/json');
+// =&gt; true
+
+req.accepts('image/png');
+req.accepts('png');
+// =&gt; false</code></pre>
+            
+            <h3 id="req-is">req.is(type)</h3>
+            
+            <p>受信したリクエストが <em>Content-Type</em> ヘッダを持っているか、また <em>type</em> で指定されたMIMEタイプを持っているかをチェックします。</p>
+            
+<pre><code>// With Content-Type: text/html; charset=utf-8
+req.is('html');
+req.is('text/html');
+// =&gt; true
+
+// When Content-Type is application/json
+req.is('json');
+req.is('application/json');
+// =&gt; true
+
+req.is('html');
+// =&gt; false</code></pre>
+            
+            <p>Expressとともに、リクエストに対して表明(アサーション)を実行するためのその場限りのコールバックを登録することができます。<br />
+            たとえば、受信するリクエストが画像であることを表現する方法が欲しければ、次のように <em>"an image"</em> コールバックを登録します。<</p>
+            
+<pre><code>app.is('an image', function(req){
+  return 0 == req.headers['content-type'].indexOf('image');
+});</code></pre>
+            
+            <p>これで、<em>"image/jpeg"</em> や <em>"image/png"</em> といったコンテントタイプの表明をルートのコールバック内で用いることができます。</p>
+            
+<pre><code>app.post('/image/upload', function(req, res, next){
+  if (req.is('an image')) {
+    // do something
+  } else {
+    next();
+  }
+});</code></pre>
+            
+            <p>このメソッドの用途は <em>Content-Type</em> のチェックだけ<em>ではない</em>ことを覚えておいてください。あなたが望むあらゆる表明に利用できます。</p>
+            
+            <p>ワイルドカードによるマッチングも用意されているので、上に示した <em>"an image"</em> の例は、サブタイプのみを表明する次のようなシンプルな形に置き換えることができます。</p>
+            
+            <pre><code>req.is('image/*');</code></pre>
+            
+            <p><em>type</em> による表明も可能です。次の例は <em>"application/json"</em> と <em>"text/json"</em> について true を返します。</p>
+            
+            <pre><code>req.is('*/json');</code></pre>
+            
+            <h3 id="req-param">req.param(name[, default])</h3>
+            
+            <p><em>name</em> で指定されたパラメータの値を返します。</p>
+            
+            <ul>
+            <li>ルートパラメータのチェック(<em>req.params</em>), 例: /user/:id</li>
+            <li>クエリ文字列のチェック(<em>req.query</em>), 例: ?id=12</li>
+            <li>URLエンコードされたボディパラメータのチェック(<em>req.body</em>), 例: id=12</li>
+            </ul>
+            
+            
+            <p>URLエンコードされたボディパラメータに対して使用するには、<em>req.body</em> がオブジェクトである必要があります。これは <em>bodyParser</em> ミドルウェアによってなされます。</p>
+            
+            <h3 id="req-flash">req.flash(type[, msg])</h3>
+            
+            <p>指定された <em>type</em> の <em>msg</em> のフラッシュをキューに追加します。<em>msg</em> を渡さなかった場合、<em>type</em> のキューに登録されているすべてのメッセージをフラッシュします。また、引数なしで呼び出した場合はキューに登録されたすべてのメッセージをフラッシュします。</p>
+            
+<pre><code>req.flash('info', 'email sent');
+req.flash('error', 'email delivery failed');
+req.flash('info', 'email re-sent');
+// =&gt; 2
+
+req.flash('info');
+// =&gt; ['email sent', 'email re-sent']
+
+req.flash('info');
+// =&gt; []
+
+req.flash();
+// =&gt; { error: ['email delivery failed'], info: [] }</code></pre>
+            
+            <p>通知メッセージのフラッシュにはフォーマッタが利用できます。デフォルトでは %s のみが有効です。</p>
+            
+            <pre><code>req.flash('info', 'email delivery to _%s_ from _%s_ failed.', toUser, fromUser);</code></pre>
+            
+            <h3 id="req-isxmlhttprequest">req.isXMLHttpRequest</h3>
+            
+            <p>このゲッターは、リクエストが <em>XMLHttpRequest</em> によるものであるかを調べるため <em>X-Requested-With</em> ヘッダをチェックします。<em>req.xhr</em> のエイリアスです。</p>
+            
+<pre><code>req.xhr
+req.isXMLHttpRequest</code></pre>
+            
+            <h3 id="res-header">res.header(key[, val])</h3>
+            
+            <p><em>key</em> で指定されたレスポンスヘッダの値を取得、または設定します。</p>
+            
+<pre><code>res.header('Content-Length');
+// =&gt; undefined
+
+res.header('Content-Length', 123);
+// =&gt; 123
+
+res.header('Content-Length');
+// =&gt; 123</code></pre>
+            
+            <h3 id="res-charset">res.charset</h3>
+            
+            <p>あとに続く <code>Content-Type</code> フィールドのためのキャラクタセットを設定します。たとえば <code>res.send()</code> と <code>res.render()</code> にはデフォルトでは "utf8" が指定されていますが、テンプレートの描画前にこれを明示的に設定します。</p>
+            
+<pre><code>res.charset = 'ISO-8859-1';
+res.render('users');</code></pre>
+            
+            <p>もしくは <code>res.send()</code> での応答の前に:</p>
+            
+<pre><code>res.charset = 'ISO-8859-1';
+res.send(str);</code></pre>
+            
+            <p>または node の <code>res.end()</code> とともに:</p>
+            
+<pre><code>res.charset = 'ISO-8859-1';
+res.header('Content-Type', 'text/plain');
+res.end(str);</code></pre>
+            
+            <h3 id="res-contenttype">res.contentType(type)</h3>
+            
+            <p>レスポンスヘッダの <em>Content-Type</em> の値を、与えられた <em>type</em> に設定します。</p>
+            
+<pre><code>var filename = 'path/to/image.png';
+  res.contentType(filename);
+  // Content-Type is now "image/png"</code></pre>
+            
+            <p><em>Content-Type</em> リテラルも同様に動作します。</p>
+            
+            <pre><code>res.contentType('application/json');</code></pre>
+            
+            <p>また、単純に拡張子のみで指定することもできます。 <code>. (ドット)</code>は不要です。</p>
+            
+            <pre><code>res.contentType('json');</code></pre>
+            
+            <h3 id="res-attachment">res.attachment([filename])</h3>
+            
+            <p>オプションの <em>filename</em> とともに、レスポンスヘッダの <em>Content-Disposition</em> を "attachment" に設定します。</p>
+            
+            <pre><code>res.attachment('path/to/my/image.png');</code></pre>
+            
+            <h3 id="res-sendfile">res.sendfile(path[, options[, callback]])</h3>
+            
+            <p>任意のファイルの転送のために <code>res.download()</code> よって使用されます。</p>
+            
+            <pre><code>res.sendfile('path/to/my.file');</code></pre>
+            
+            <p>このメソッドは、例外の発生時、または転送の完了時に呼び出されるコールバックを受け取ります。デフォルトでは障害の発生時に <code>next(err)</code> が呼ばれますが、コールバックを渡すときには明示的にこれを呼び出すか、またはエラー時の振る舞いを指定する必要があります。</p>
+            
+<pre><code>res.sendfile(path, function(err){
+  if (err) {
+    next(err);
+  } else {
+    console.log('transferred %s', path);
+  }
+});</code></pre>
+            
+            <p>オプションは内部的な <em>fs.createReadStream()</em> の呼び出し時にも渡されます。これを利用して、たとえば <em>bufferSize</em> の変更を行うことが可能です。</p>
+            
+<pre><code>res.sendfile(path, { bufferSize: 1024 }, function(err){
+  // handle
+});</code></pre>
+            
+            <h3 id="res-download">res.download(file[, filename[, callback[, callback2]]])</h3>
+            
+            <p>オプションの <em>filename</em> とともに、ファイル <em>file</em> の転送をおこないます。</p>
+            
+<pre><code>res.download('path/to/image.png');
+res.download('path/to/image.png', 'foo.png');</code></pre>
+            
+            <p>これは以下と等価です。</p>
+            
+<pre><code>res.attachment(file);
+res.sendfile(file);</code></pre>
+            
+            <p>2つ目、あるいは3つ目の引数としてコールバックを渡すことができます。このコールバックは <em>res.sendfile()</em> に渡されます。ヘッダが送信が完了していない場合、このコールバックの中で応答を続けることができます。</p>
+            
+<pre><code>res.download(path, 'expenses.doc', function(err){
+  // handle
+});</code></pre>
+            
+            <p>オプションのコールバックである <em>callback2</em> では、応答すべきではない接続に関するエラーの発生時の処理を指定します。</p>
+            
+<pre><code>res.download(path, function(err){
+  // エラー、または終了
+}, function(err){
+  // 接続に関するエラー
+});</code></pre>
+            
+            <h3 id="res-send">res.send(body|status[, headers|status[, status]])</h3>
+            
+            <p><em>res.send()</em> メソッドは、レスポンスとしてJSONやhtml文字列、Buffer インスタンス、ステータスコードの数値表現を渡すことの出来る高レベルのレスポンスユーティリティです。以下はすべて有効な使用法です。 </p>
+            
+<pre><code>res.send(); // 204
+res.send(new Buffer('wahoo'));
+res.send({ some: 'json' });
+res.send('&lt;p&gt;some html&lt;/p&gt;');
+res.send('Sorry, cant find that', 404);
+res.send('text', { 'Content-Type': 'text/plain' }, 201);
+res.send(404);</code></pre>
+            
+            <p><code>res.send()</code> またはそれ以前に <code>res.header()</code> や <code>res.contentType()</code> を使用して明示的に変更を加えない限り、デフォルトでレスポンスヘッダ <em>Content-Type</em>が設定されます。 これらを使用すれば再びセットされることはないでしょう。</p>
+            
+            <p>このメソッドはレスポンスを終了することに気を付けてください。複数回の書き出しやストリーミングを行いたい場合は、nodeの持つ <em>res.write()</em> を使用してください。</p>
+            
+            <h3 id="res-redirect">res.redirect(url[, status])</h3>
+            
+            <p><em>status</em> とともに、指定された <em>url</em> へリダイレクトします。デフォルトの <em>status</em> は 302 です。</p>
+            
+<pre><code>res.redirect('/', 301);
+res.redirect('/account');
+res.redirect('http://google.com');
+res.redirect('home');
+res.redirect('back');</code></pre>
+            
+            <p>Expressは「リダイレクトマッピング」をサポートしており、デフォルトでは <em>home</em> と <em>back</em> が提供されます。<br />
+            <em>back</em> マッピングは <em>Referrer</em> と <em>Referer</em> ヘッダをチェックし、<em>home</em> は "home" の設定(デフォルトでは "/" にマッピングされています)を利用します。</p>
+            
+            <h3 id="res-cookie">res.cookie(name, val[, options])</h3>
+            
+            <p>指定された <em>name</em>、 <em>val</em> でクッキーを設定します。<br />
+            オプションには <em>httpOnly</em>、<em>secure</em>、<em>expires</em> などがあります。</p>
+            
+<pre><code>// "Remember me" for 15 minutes 
+res.cookie('rememberme', 'yes', {
+    expires : new Date(Date.now() + 900000)
+  , httpOnly: true
+});</code></pre>
+            
+            <p><em>maxAge</em> プロパティは <em>Date.now()</em> からのミリ秒の相対値として <em>expires</em> の設定に使用することができます。この方法を使うと、上記の例は次のようになります。</p>
+            
+            <pre><code>res.cookie('rememberme', 'yes', { maxAge: 900000 });</code></pre>
+            
+            <p>受信した <em>Cookie</em> ヘッダをパースするには <em>cookieParser</em> ミドルウェアの提供する <em>req.cookies</em> オブジェクトを使用します。</p>
+            
+<pre><code>app.use(express.cookieParser());
+
+app.get('/', function(req, res){
+  // use req.cookies.rememberme
+});</code></pre>
+            
+            <h3 id="res-clearcookie">res.clearCookie(name[, options])</h3>
+            
+            <p>"expires" の値がずっと以前に設定されているクッキー <em>name</em> を削除します。</p>
+            
+            <pre><code>res.clearCookie('rememberme');</code></pre>
+            
+            <h3 id="res-render">res.render(view[, options[, fn]])</h3>
+            
+            <p>与えられた <em>options</em> とともに <em>view</em> を描画します。オプションとしてコールバック関数 <em>fn</em> を渡します。
+            コールバック関数が与えられた場合、<em>レスポンスは自動的には作成されません</em>が、<em>200</em> と <em>text/html</em> のレスポンスについては提供されます。</p>
+            
+            <p>なお、渡された <em>options</em> はローカル変数となります。たとえばビューに対して "user" を公開しローカルに閉じ込めたい場合、同じオブジェクト内でこのようにします。</p>
+            
+<pre><code>var user = { name: 'tj' };
+res.render('index', { layout: false, user: user });</code></pre>
+            
+            <h3 id="res-partial">res.partial(view[, options])</h3>
+            
+            <p><em>view</em> の一部を与えられた <em>options</em> とともに描画します。このメソッドはローカル変数として常にビューに利用可能です。</p>
+            
+            <ul>
+            <li><em>object</em>: <em>as</em>、またはビューの名前から派生したオブジェクトの名前です。</li>
+            <li><p><em>as</em>: それぞれの <em>collection</em>、または <em>object</em> の値に対する変数名です。デフォルトではビューの名前となります。</p>
+            
+            <ul>
+            <li>as: "something" は <em>something</em> というローカル変数になります。</li>
+            <li>as: これはテンプレートのコンテクストとしてコレクションの値を使用するでしょう。</li>
+            <li>as: グローバル変数は <em>locals</em> と共に、コレクションの値が持つプロパティにマージされるでしょう。</li>
+            </ul>
+            </li>
+            <li><p><em>collection</em>: オブジェクトの配列。名前はビュー自身から派生したものです。
+            例として <em>video.html</em> では <em>video</em> が利用可能です。</p></li>
+            </ul>
+            
+            
+            <p>以下の例はすべて等価です。コレクションの値の名前は <em>partial</em> に渡された際、ビューの名前から <em>movie</em> となるでしょう。</p>
+            
+<pre><code>partial('theatre/movie.jade', { collection: movies });
+partial('theatre/movie.jade', movies);
+partial('movie.jade', { collection: movies });
+partial('movie.jade', movies);
+partial('movie', movies);
+// In view: movie.director</code></pre>
+            
+            <p>これを <em>movie</em> から <em>video</em> に変更するには <em>as</em> オプションを使用します。</p>
+            
+<pre><code>partial('movie', { collection: movies, as: 'video' });
+// In view: video.director</code></pre>
+            
+            <p>また、ビューの中では <em>this</em> で movie を参照することができます。<br />
+            <em>movie.director</em> であれば <em>this.director</em> と置き換えることが可能です。</p>
+            
+<pre><code>partial('movie', { collection: movies, as: this });
+// In view: this.director</code></pre>
+            
+            <p>もうひとつは、コレクションのアイテムのプロパティを <em>as: global</em> オプションを使用することで「展開」し、あくまでローカル変数でありながら擬似的にグローバルとして扱う方法です。</p>
+            
+<pre><code>partial('movie', { collection: movies, as: global });
+// In view: director</code></pre>
+            
+            <p>この同じロジックを単一の <em>partial</em> オブジェクトに適用する方法を示します。</p>
+            
+<pre><code>partial('movie', { object: movie, as: this });
+// In view: this.director
+
+partial('movie', { object: movie, as: global });
+// In view: director
+
+partial('movie', { object: movie, as: 'video' });
+// In view: video.director
+
+partial('movie', { object: movie });
+// In view: movie.director</code></pre>
+            
+            <p>第二引数にコレクションではない(<em>.length</em> を持たない)値が渡された場合、それは<em>オブジェクト</em>であると仮定され、その後オブジェクトの持つローカル変数の名前はビューの名前から導かれたものになります。</p>
+            
+<pre><code>var movie = new Movie('Nightmare Before Christmas', 'Tim Burton')
+partial('movie', movie)
+// =&gt; In view: movie.director</code></pre>
+            
+            <p>これの例外は "{}" や "new Object" といったプレーンなオブジェクトが渡されたときで、これらはローカルオブジェクトをともなうオブジェクトであると推測されます。たとえば次の例では "movie" がローカルオブジェクトとなることを期待していますが、"movie" はプレーンなオブジェクトのため、"director" と "title" は単にローカルオブジェクトとなります。</p>
+            
+<pre><code>var movie = { title: 'Nightmare Before Christmas', director: 'Tim Burton' }; 
+partial('movie', movie)</code></pre>
+            
+            <p>このようにプレーンなオブジェクトを渡すことが求められるケースでは、単にそのオブジェクトにキーを割り振るか <code>object</code> キーを使用すれば、ファイル名から導かれた変数名が使われるでしょう。以下の例もまた等価です。</p>
+            
+<pre><code>partial('movie', { locals: { movie: movie }})
+partial('movie', { movie: movie })
+partial('movie', { object: movie })</code></pre>
+            
+            <p>この厳格なAPIは、AjaxやWebSocketを介した断片的な応答のためにルート内部から利用することができます。たとえばルート内から直接ユーザーディレクトリのコレクションの表示ができます。</p>
+            
+<pre><code>app.get('/users', function(req, res){
+  if (req.xhr) {
+    // "user" ビューに渡されたコレクション内の
+    // 各ユーザーをともなう応答
+    res.partial('user', users);
+  } else {
+    // respond with layout, and users page
+    // which internally does partial('user', users)
+    // along with other UI
+    res.render('users', { users: users });
+  }
+});</code></pre>
+            
+            <h3 id="res-local">res.local(name[, val])</h3>
+            
+            <p>指定されたローカル変数 <em>name</em> の値を 設定または取得します。これらのローカル変数は、レスポンスが <code>res.render()</code> といったビューの描画を行うメソッドに適用された際に構築されます。</p>
+            
+<pre><code>app.all('/movie/:id', function(req, res, next){
+  Movie.get(req.params.id, function(err, movie){
+    // res.locals.movie = movie をセット
+    res.local('movie', movie);
+  });
+});
+
+app.get('/movie/:id', function(req, res){
+  // movie はすでにローカル変数となっている
+  // 望むならもっと渡すことができる
+  res.render('movie', { displayReviews: true });
+});</code></pre>
+            
+            <h3 id="res-locals">res.locals(obj)</h3>
+            
+            <p>与えられた <em>obj</em> とともに複数のローカル変数をアサインします。以下の例は等価です。</p>
+            
+<pre><code>res.local('foo', bar);
+res.local('bar', baz);
+
+res.locals({ foo: bar, bar, baz });</code></pre>
+            
+            <h3 id="app-set">app.set(name[, val])</h3>
+            
+            <p>アプリケーションレベルの設定 <em>name</em> の値を <em>val</em> に設定します。また <em>val</em> が省略された場合は <em>name</em> の値を取得します。</p>
+            
+<pre><code>app.set('views', __dirname + '/views');
+app.set('views');
+// =&gt; ...path...</code></pre>
+            
+            <p>または <em>app.settings</em> を通して、セッティングの値へシンプルにアクセスできます。</p>
+            
+<pre><code>app.settings.views
+// =&gt; ...path...</code></pre>
+            
+            <h3 id="app-enable">app.enable(name)</h3>
+            
+            <p><em>name</em> の設定を有効化します。</p>
+            
+<pre><code>app.enable('some arbitrary setting');
+app.set('some arbitrary setting');
+// =&gt; true
+
+app.enabled('some arbitrary setting');
+// =&gt; true</code></pre>
+            
+            <h3 id="app-enabled">app.enabled(name)</h3>
+            
+            <p><em>name</em> の設定が有効かどうかをチェックします。有効の場合は true を返します。</p>
+            
+<pre><code>app.enabled('view cache');
+// =&gt; false
+
+app.enable('view cache');
+app.enabled('view cache');
+// =&gt; true</code></pre>
+            
+            <h3 id="app-disable">app.disable(name)</h3>
+            
+            <p><em>name</em> の設定を無効化します。</p>
+            
+<pre><code>app.disable('some setting');
+app.set('some setting');
+// =&gt; false
+
+app.disabled('some setting');
+// =&gt; false</code></pre>
+            
+            <h3 id="app-disabled">app.disabled(name)</h3>
+            
+            <p><em>name</em> の設定が無効かどうかをチェックします。無効の場合は true を返します。</p>
+            
+<pre><code>app.enable('view cache');
+
+app.disabled('view cache');
+// =&gt; false
+
+app.disable('view cache');
+app.disabled('view cache');
+// =&gt; true</code></pre>
+            
+            <h3 id="app-configure">app.configure(env|function[, function])</h3>
+            
+            <p>指定された(またはすべての)、コールバックをともなう <em>env</em> に対してコールバック関数を定義します。</p>
+            
+<pre><code>app.configure(function(){
+  // それぞれの環境で実行される
+});
+
+app.configure('development', function()h3);</code></pre>
+            
+            <h3 id="app-redirect">app.redirect(name, val)</h3>
+            
+            <p><em>res.redirect()</em> とともに使用することで、アプリケーションレベルでのリダイレクトマッピングを可能にします。</p>
+            
+            <pre><code>app.redirect('google', 'http://google.com');</code></pre>
+            
+            <p>ルート内で該当のキーとともに呼び出します。</p>
+            
+            <p>   res.redirect(‘google’);</p>
+            
+            <p>動的なマッピングも可能です。</p>
+            
+<pre><code>app.redirect('comments', function(req, res){
+  return '/post/' + req.params.id + '/comments';
+});</code></pre>
+            
+            <p>これで以下のように呼び出すと、リダイレクトはリクエストのコンテクストにもとづいて動的に調整されます。もし <em>GET /post/12</em> というアドレスでこのルートを呼び出したとすると、リダイレクト先は <em>/post/12/comments</em> となるでしょう。</p>
+            
+<pre><code>app.get('/post/:id', function(req, res){
+  res.redirect('comments');
+});</code></pre>
+            
+            <p>マウントの際、<em>res.redirect()</em> はマウントポイントを尊重します。たとえばブログアプリケーションが <em>/blog</em> にマウントされた場合、以下は <em>/blog/posts</em> へとリダイレクトされます。</p>
+            
+            <pre><code>res.redirect('/posts');</code></pre>
+            
+            <h3 id="app-error">app.error(function)</h3>
+            
+            <p><em>function</em> をエラーハンドラに追加します。この関数は以下に示すように、第一引数に例外オブジェクトを受け取ります。
+            何回かこのメソッドを呼び出すことによっていくつかのエラーハンドラをセットできますが、もしもあるハンドラに例外処理をさせたくない場合、そのハンドラは <em>next(err)</em> を明示的に呼び出す必要があることに注意してください。</p>
+            
+<pre><code>app.error(function(err, req, res, next){
+  res.send(err.message, 500);
+});</code></pre>
+            
+            <h3 id="app-helpers">app.helpers(obj)</h3>
+            
+            <p>静的なビューヘルパーを登録します。</p>
+            
+<pre><code>app.helpers({
+    name: function(first, last){ return first + ', ' + last }
+  , firstName: 'tj'
+  , lastName: 'holowaychuk'
+});</code></pre>
+            
+            <p>これで、ビュー内で <em>firstName</em> と <em>lastName</em> という変数が利用可能になり、同様に <em>name()</em> という関数も公開されます。</p>
+            
+            <pre><code>&lt;%= name(firstName, lastName) %&gt;</code></pre>
+            
+            <p>Expressはデフォルトでもいくつかのローカルオブジェクトを提供しています。</p>
+            
+<pre><code>- 'settings'  アプリケーションの設定オブジェクトです
+- 'filename'  ビューのファイル名です
+- 'layout(path)'  ビューの内部からレイアウトファイルを指定します</code></pre>
+            
+            <p>このメソッドは <em>app.locals()</em> のエイリアスです。</p>
+            
+            <h3 id="app-dynamichelpers">app.dynamicHelpers(obj)</h3>
+            
+            <p>動的なビューヘルパーを登録します。動的なビューヘルパーは <em>req</em> と <em>res</em> を引数に取る単純な関数で、ビューの描画の前に <em>Server</em> のインスタンスに対して評価されます。この関数の戻り値はオブジェクト内のプロパティに関連付けられたローカルオブジェクトとなります。</p>
+            
+<pre><code>app.dynamicHelpers({
+  session: function(req, res){
+    return req.session;
+  }
+});</code></pre>
+            
+            <p>それからすべてのビューでセッションが利用可能になり、 <em>session.name</em> といったようにそのデータにアクセスできます。</p>
+            
+            <pre><code>&lt;%= session.name %&gt;</code></pre>
+            
+            <h3 id="app-lookup">app.lookup</h3>
+            
+            <p>httpメソッドの <em>app.lookup</em> は、指定された <em>path</em> に関連付けられたコールバック関数の配列を返します。 </p>
+            
+            <p>以下のようなルーティングを定義したとします。</p>
+            
+<pre><code>app.get('/user/:id', function(){});
+app.put('/user/:id', function(){});
+app.get('/user/:id/:op?', function(){});</code></pre>
+            
+            <p>このルックアップ機能はどのルートが定義されているかをチェックするのに利用でき、Express上に高レベルのフレームワークを構築するにあたって非常に有用なものとなります。</p>
+            
+<pre><code>app.lookup.get('/user/:id');
+// =&gt; [Function]
+
+app.lookup.get('/user/:id/:op?');
+// =&gt; [Function]
+
+app.lookup.put('/user/:id');
+// =&gt; [Function]
+
+app.lookup.all('/user/:id');
+// =&gt; [Function, Function]
+
+app.lookup.all('/hey');
+// =&gt; []</code></pre>
+            
+            <p><em>app.lookup.VERB()</em> のエイリアスであり、コールバックを省略したショートカットとして <em>app.VERB()</em> というシンプルなメソッドが使用できます。たとえば以下の例は等価です。(訳註:VERBは各HTTP動詞に置き換えてください)</p>
+            
+<pre><code>app.lookup.get('/user');
+app.get('/user');</code></pre>
+            
+            <p>返される関数は次のようなプロパティを持っています。</p>
+            
+<pre><code>var fn = app.get('/user/:id/:op?')[0];
+
+fn.regexp
+// =&gt; /^¥/user¥/(?:([^¥/]+?))(?:¥/([^¥/]+?))?¥/?$/i
+
+fn.keys
+// =&gt; ['id', 'op']
+
+fn.path
+// =&gt; '/user/:id/:op?'
+
+fn.method
+// =&gt; 'GET'</code></pre>
+            
+            <h3 id="app-match">app.match</h3>
+            
+            <p>http メソッドの <em>app.match</em> は指定された <em>url</em> に一致するコールバック関数の配列を返します。<em>url</em> にはクエリ文字列などを含めることができます。これはどのルートが応じる機会を持っているかを参照する際に役立ちます。</p>
+            
+            <p>以下のようなルーティングを定義したとします。</p>
+            
+<pre><code>app.get('/user/:id', function(){});
+app.put('/user/:id', function(){});
+app.get('/user/:id/:op?', function(){});</code></pre>
+            
+            <p><strong>GET</strong> に対する一致は2つの関数を返します。
+            2つ目のルートにある <em>:op</em> 以降はオプションです。</p>
+            
+<pre><code>app.match.get('/user/1');
+// =&gt; [Function, Function]</code></pre>
+            
+            <p>この2回目の呼び出しは <em>/user/:id/:op?</em> へのコールバックのみを返します。</p>
+            
+<pre><code>app.match.get('/user/23/edit');
+  // =&gt; [Function]</code></pre>
+            
+            <p>また <em>all()</em> を使用することで、httpメソッドを無視してすべてのコールバックを得ることができます。</p>
+            
+<pre><code>app.match.all('/user/20');
+// =&gt; [Function, Function, Function]</code></pre>
+            
+            <p>一致したそれぞれの関数は次のようなのプロパティを持っています。</p>
+            
+<pre><code>var fn = app.match.get('/user/23/edit')[0];
+
+fn.keys
+// =&gt; ['id', 'op']
+
+fn.params
+// =&gt; { id: '23', op: 'edit' }
+
+fn.method
+// =&gt; 'GET'</code></pre>
+            
+            <h3 id="app-mounted">app.mounted(fn)</h3>
+            
+            <p><em>Server</em> が <em>Server#use()</em> に渡されたときに呼び出されるコールバック<em>fn</em> をアサインします。</p>
+            
+<pre><code>var app = express.createServer(),
+    blog = express.createServer();
+
+blog.mounted(function(parent){
+  // parent is app
+  // "this" is blog
+});
+
+app.use(blog);</code></pre>
+            
+            <h3 id="app-register">app.register(ext, exports)</h3>
+            
+            <p><em>exports</em> に指定されたテンプレートエンジンを <em>ext</em> に指定された形式で出力するよう登録します。<br />
+            たとえば ".html" を Jade にマッピングしたい場合はこうです。</p>
+            
+            <pre><code>app.register('.html', require('jade'));</code></pre>
+            
+            <p>これは正しく拡張子と一致しないライブラリにも便利です。<br />
+            たとえば私の haml.js ライブラリは npm から "hamljs" としてインストールされました。
+            そのため、layout.hamljs に代わって ".haml" をそのエンジンとして登録します。</p>
+            
+            <pre><code>app.register('.haml', require('haml-js'));</code></pre>
+            
+            <p>Expressの仕様に沿っていないエンジンについてはこの方法でそれらのAPIをラップすることが可能です。
+            次の例は <em>.md</em> をマークダウンファイルの表示用にマッピングするものです。
+            一度 html にレンダリングすることで、結果はその後の呼び出しで変更されず、
+            "{name}" の形式で置換を行うことが可能となります。</p>
+            
+<pre><code>app.register('.md', {
+  compile: function(str, options){
+    var html = md.toHTML(str);
+    return function(locals){
+      return html.replace(/¥{([^}]+)¥}/g, function(_, name){
+        return locals[name];
+      });
+    };
+  }
+});</code></pre>
+            
+            <h3 id="app-listen">app.listen([port[, host]])</h3>
+            
+            <p>アプリケーションサーバーを指定されたポートにバインドします。デフォルトは3000番です。ホストが省略された場合は <em>INADDR_ANY</em> を通じてすべての接続を受け入れます。</p>
+            
+<pre><code>app.listen();
+app.listen(3000);
+app.listen(3000, 'n.n.n.n');」</code></pre>
+            
+            <p><em>port</em> にはUNIXドメインソケットへのパスを表現する文字列も使用できます。</p>
+            
+            <pre><code>app.listen('/tmp/express.sock');</code></pre>
+            
+            <p>試してみましょう。</p>
+            
+<pre><code>$ telnet /tmp/express.sock
+GET / HTTP/1.1
+
+HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 11
+
+Hello World</code></pre>
+			</div>
+		</div>
+	
+</body></html>
