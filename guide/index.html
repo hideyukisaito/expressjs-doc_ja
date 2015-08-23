@@ -152,9 +152,10 @@ $ express /tmp/foo &amp;&amp; cd /tmp/foo
             
             <h2 id="creating-a server">サーバーの作成</h2>
             
-            <p><em>express.HTTPServer</em> のインスタンスを生成するには <em>createServer()</em> メソッドを呼び出すだけです。インスタンス <em>app</em> を使って、次の例の <em>app.get()</em> でおこなっているように、HTTP動詞にもとづいてルーティングを定義することができます。</p>
+						サーバーを生成するには <em>express()</em> メソッドを呼び出すだけです。インスタンス <em>app</em> を使って、次の例の <em>app.get()</em> でおこなっているように、HTTP動詞にもとづいてルーティングを定義することができます。</p>
             
-<pre><code>var app = require('express').createServer();
+<pre><code>var express = require('express');
+var app = express();
 
 app.get('/', function(req, res){
   res.send('hello world');
